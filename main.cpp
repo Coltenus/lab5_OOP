@@ -2,7 +2,7 @@
 #include <iostream>
 #include <raylib.h>
 #include "src/Window.h"
-#include "src/Elements/elements.h"
+#include "src/Elements/Element.h"
 #include "src/common.h"
 #include "src/Menu.h"
 #include "src/MenuObjects/mobjects.h"
@@ -127,7 +127,7 @@ int main(int, char**)
     return 0;
 }
 
-///TODO: Need to connect it with preview class.
+///TODO: Preview for figures and editor for them.
 /// Add element to group.
 /// Copy element.
 /// Undo/redo ability.
