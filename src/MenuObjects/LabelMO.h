@@ -56,6 +56,8 @@ namespace l5 {
         else SetLength(_fontH);
     }
 
+    template<> void LabelMO<Vector2>::Draw(Vector2D pos);
+    template<> void LabelMO<std::string>::Draw(Vector2D pos);
 } // l5
 
 #endif //LAB5_LABELMO_H

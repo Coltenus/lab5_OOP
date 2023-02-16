@@ -38,7 +38,7 @@ namespace l5 {
                 reinterpret_cast<LabelMO<T>*>(object)->SetFontHeight(_fontH, _isXAxis);
                 break;
             case 2:
-                reinterpret_cast<ButtonMO<T>*>(object)->SetFontHeight(_fontH, _isXAxis);
+                reinterpret_cast<ButtonMO*>(object)->SetFontHeight(_fontH, _isXAxis);
                 break;
         }
         objects.push_back(object);

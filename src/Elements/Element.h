@@ -11,13 +11,16 @@ namespace l5 {
 
     class Element {
     protected:
+        int _type;
         Vector2D _pos;
         ColorSt _color;
-        bool _isSelected;
+        bool _isSelected, _needRemoval;
 
     public:
         static bool elementSelected, resetSelection;
-        Element(Vector2D pos, ColorSt color);
+        Element(int type, Vector2D pos, ColorSt color);
+        Element(Element& element);
+        Element(Element* element);
         virtual ~Element() = default;
         /*
          * Draw this element on window
@@ -31,13 +34,17 @@ namespace l5 {
         /*
          * Check if a mouse clicked on the element
          */
-        virtual bool CheckPosition(Vector2D pos) = 0;
+        virtual bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) = 0;
         /*
          * Check if the element is inside given area
          */
         virtual bool CheckPosition(Vector2D pos1, Vector2D pos2) = 0;
         // Get element position
         Vector2D GetPos();
+        void SetPos(Vector2D pos);
+        void StartRemoval();
+        bool NeedRemoval();
+        int GetType();
     };
 
 } // l5

@@ -22,6 +22,8 @@ namespace l5 {
          * Constructor with thickness with value 1
          */
         Circle(Vector2D pos, int radius, ColorSt color);
+        Circle(Circle& circle);
+        Circle(Circle* circle);
         ~Circle() override = default;
         /*
          * Draw this circle on window
@@ -31,7 +33,7 @@ namespace l5 {
         /*
          * Check if a mouse clicked on the circle
          */
-        bool CheckPosition(Vector2D pos) override;
+        bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
         /*
          * Check if the circle is inside given area
          */

@@ -8,7 +8,7 @@
 
 namespace l5 {
     Circle::Circle(Vector2D pos, int radius, ColorSt color, int thickness)
-    : Element(pos, color), _radius(radius) {
+    : Element(1, pos, color), _radius(radius) {
         if(thickness > _radius)
             _thickness = _radius;
         else _thickness = thickness;
@@ -17,9 +17,17 @@ namespace l5 {
     Circle::Circle(Vector2D pos, int radius, ColorSt color)
     : Circle(pos, radius, color, 1) {}
 
+    Circle::Circle(Circle &circle)
+    : Element(circle), _radius(circle._radius), _thickness(circle._thickness) {}
+
+    Circle::Circle(Circle *circle)
+    : Element(circle), _radius(circle->_radius), _thickness(circle->_thickness) {}
+
     void Circle::Draw(Vector2D* pos) {
         static int counter;
         counter = _radius;
+        if(_isSelected) _color.a = 120;
+        else _color.a = 255;
         do {
             if(pos == nullptr)
                 DrawCircleLines(_pos.x, _pos.y, counter, {_color.r, _color.g, _color.b, _color.a});
@@ -28,8 +36,13 @@ namespace l5 {
         } while (counter > _radius - _thickness);
     }
 
-    bool Circle::CheckPosition(Vector2D pos) {
-        return pow(_pos.x - pos.x, 2) + pow(_pos.y - pos.y, 2) <= pow(_radius, 2);
+    bool Circle::CheckPosition(Vector2D mouse, Vector2D* pos) {
+        bool result;
+
+        if(pos) result = pow(pos->x - mouse.x, 2) + pow(pos->y - mouse.y, 2) <= pow(_radius, 2);
+        else result = pow(_pos.x - mouse.x, 2) + pow(_pos.y - mouse.y, 2) <= pow(_radius, 2);
+
+        return result;
     }
 
     bool Circle::CheckPosition(Vector2D pos1, Vector2D pos2) {

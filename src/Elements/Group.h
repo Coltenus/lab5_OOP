@@ -17,10 +17,17 @@ namespace l5 {
         std::vector<Vector2D> _elementsPos;
 
     public:
+        static bool firstPointSelected;
+        static std::vector<Element*> FindElements(Vector2D p1, Vector2D p2, std::vector<Element*>& elements);
+        static Vector2D FindCorrectPos(Vector2D p1, Vector2D p2);
+        static Vector2D FindSize(Vector2D p1, Vector2D p2);
+        static Element* ConvertChildClass(Element* element);
         /*
          * This constructor has argument "elements" which is contains elements in selected area
          */
-        Group(Vector2D pos, Vector2D size, std::vector<Element*> elements);
+        Group(Vector2D pos, Vector2D size, std::vector<Element*>& elements);
+        Group(Group& group);
+        Group(Group* group);
         ~Group() override = default;
         /*
          * Draw this group on window
@@ -30,11 +37,13 @@ namespace l5 {
         /*
          * Check if a mouse clicked on the group
          */
-        bool CheckPosition(Vector2D pos) override;
+        bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
         /*
          * Check if the group is inside given area
          */
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
+        void SetSize(Vector2D size);
+        void SetElements(std::vector<Element*>& elements);
     };
 
 } // l5

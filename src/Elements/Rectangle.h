@@ -23,6 +23,8 @@ namespace l5 {
          * Constructor with thickness with value 1
          */
         Rectangle(Vector2D pos, Vector2D size, ColorSt color);
+        Rectangle(Rectangle& rectangle);
+        Rectangle(Rectangle* rectangle);
         ~Rectangle() override = default;
         /*
          * Draw this rectangle on window
@@ -32,7 +34,7 @@ namespace l5 {
         /*
          * Check if a mouse clicked on the rectangle
          */
-        bool CheckPosition(Vector2D pos) override;
+        bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
         /*
          * Check if the rectangle is inside given area
          */

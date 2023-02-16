@@ -19,7 +19,7 @@ namespace l5 {
 #define WORKSPACE_X_ST 0
 #define WORKSPACE_X_END (WIDTH - 300)
 #define WORKSPACE_Y_ST 40
-#define WORKSPACE_Y_END HEIGHT
+#define WORKSPACE_Y_END (HEIGHT - 30)
 }
 
 #endif //LAB5_COMMON_H
