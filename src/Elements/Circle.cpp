@@ -7,14 +7,14 @@
 #include <valarray>
 
 namespace l5 {
-    Circle::Circle(Vector2D pos, int radius, Color color, int thickness)
+    Circle::Circle(Vector2D pos, int radius, ColorSt color, int thickness)
     : Element(pos, color), _radius(radius) {
         if(thickness > _radius)
             _thickness = _radius;
         else _thickness = thickness;
     }
 
-    Circle::Circle(Vector2D pos, int radius, Color color)
+    Circle::Circle(Vector2D pos, int radius, ColorSt color)
     : Circle(pos, radius, color, 1) {}
 
     void Circle::Draw(Vector2D* pos) {

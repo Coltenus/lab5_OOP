@@ -1,16 +1,19 @@
 #include <vector>
 #include <iostream>
-#include "libs/imgui/imgui_setup.h"
-#include "src/Circle.h"
-#include "src/Rectangle.h"
+#include <raylib.h>
+#include "src/Window.h"
+#include "src/Elements/elements.h"
+#include "src/common.h"
+#include "src/Menu.h"
+#include "src/MenuObjects/mobjects.h"
 
-ImGuiRaylibWindow* ImGuiRaylibWindow::pWindow = nullptr;
+l5::Window* l5::Window::pWindow = nullptr;
 bool l5::Element::elementSelected = false;
 bool l5::Element::resetSelection = false;
 
 int main(int, char**)
 {
-    ImGuiRaylibWindow* window = ImGuiRaylibWindow::CreateWindow("Lab5", {1600, 900}, FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+    l5::Window* window = l5::Window::CreateWindow("Lab5", {WIDTH, HEIGHT}, FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
 
     std::vector<l5::Element*> elements = {
             new l5::Circle({600, 400}, 30, {0, 0, 0, 255}, 10),
@@ -18,54 +21,33 @@ int main(int, char**)
     };
 
     int mode = 1;
-
     bool done = false;
-    bool demoShow = false;
-    bool selection = true;
+
+    l5::Menu* titleMenu = new l5::Menu({0, 0}, {WIDTH, 40}, {50, 220, 30, 255}, true);
+    titleMenu->Add(new l5::LabelMO<int>("Mode: %d", &mode));
+    titleMenu->Add<bool>(new l5::ButtonMO<bool>("Exit", &done, true));
+
+    l5::Menu* selectionMenu = new l5::Menu({WIDTH - 300, 40}, {400, HEIGHT - 40}, {20, 200, 140, 255}, false, 30);
+    selectionMenu->Add(new l5::LabelMO<int>("Select mode"));
+    selectionMenu->Add(new l5::ButtonMO<int>("Circle", &mode, 1));
+    selectionMenu->Add(new l5::ButtonMO<int>("Rectangle", &mode, 2));
+    selectionMenu->Add(new l5::ButtonMO<int>("Group", &mode, 3));
+
     while (!WindowShouldClose() && !done)
     {
         for(auto& el: elements)
             el->Update();
 
-        window->Begin();
+        titleMenu->Update();
+        selectionMenu->Update();
 
-        DrawText(TextFormat("Mode: %d", mode), 20, 20, 30, BLACK);
+        window->Begin();
 
         for(auto& el: elements)
             el->Draw();
 
-        window->BeginImGui();
-
-        if(ImGui::BeginMainMenuBar()) {
-            if(ImGui::BeginMenu("File")) {
-                ImGui::MenuItem("Demo show", nullptr, &demoShow);
-                ImGui::MenuItem("Figure selection", nullptr, &selection);
-                ImGui::Separator();
-                ImGui::MenuItem("Exit", nullptr, &done);
-                ImGui::EndMenu();
-            }
-            ImGui::EndMainMenuBar();
-        }
-        if(demoShow)
-            ImGui::ShowDemoWindow(&demoShow);
-
-        if(selection) {
-            ImGui::SetNextWindowSize((ImVec2) {300, 200}, ImGuiCond_Once);
-            ImGui::SetNextWindowPos((ImVec2) {1300, 20}, ImGuiCond_Once);
-            ImGui::Begin("Figure selection", &selection, ImGuiWindowFlags_NoResize);
-
-            ImGui::SetNextTreeNodeOpen(true, ImGuiCond_Once);
-            if(ImGui::TreeNode("Mode")) {
-                ImGui::RadioButton("Circle", &mode, 1);
-                ImGui::RadioButton("Rectangle", &mode, 2);
-                ImGui::RadioButton("Group", &mode, 3);
-                ImGui::TreePop();
-            }
-
-            ImGui::End();
-        }
-
-        window->EndImGui();
+        titleMenu->Draw();
+        selectionMenu->Draw();
 
         window->End();
         if(l5::Element::resetSelection) {
@@ -77,8 +59,17 @@ int main(int, char**)
     for(auto el: elements)
         delete el;
 
+    delete titleMenu;
+    titleMenu = nullptr;
+    delete selectionMenu;
+    selectionMenu = nullptr;
+
     delete window;
     window = nullptr;
 
     return 0;
 }
+
+///TODO: Make Builder class with prototypes and it can draw prototype in given position.
+/// Need to connect it with preview class.
+/// Make possible create and delete figures.

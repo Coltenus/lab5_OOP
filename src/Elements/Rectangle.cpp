@@ -6,7 +6,7 @@
 #include <raylib.h>
 
 namespace l5 {
-    Rectangle::Rectangle(Vector2D pos, Vector2D size, Color color, int thickness)
+    Rectangle::Rectangle(Vector2D pos, Vector2D size, ColorSt color, int thickness)
     : Element(pos, color), _size(size) {
         int buf = _size.x;
         if(buf > size.y)
@@ -16,7 +16,7 @@ namespace l5 {
         else _thickness = thickness;
     }
 
-    Rectangle::Rectangle(Vector2D pos, Vector2D size, Color color)
+    Rectangle::Rectangle(Vector2D pos, Vector2D size, ColorSt color)
     : Rectangle(pos, size, color, 1) {}
 
     void Rectangle::Draw(Vector2D* pos) {

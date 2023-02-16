@@ -5,19 +5,19 @@
 #ifndef LAB5_ELEMENT_H
 #define LAB5_ELEMENT_H
 
-#include "common.h"
+#include "../common.h"
 
 namespace l5 {
 
     class Element {
     protected:
         Vector2D _pos;
-        Color _color;
+        ColorSt _color;
         bool _isSelected;
 
     public:
         static bool elementSelected, resetSelection;
-        Element(Vector2D pos, Color color);
+        Element(Vector2D pos, ColorSt color);
         virtual ~Element() = default;
         /*
          * Draw this element on window

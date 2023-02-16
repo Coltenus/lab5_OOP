@@ -18,11 +18,11 @@ namespace l5 {
         /*
          * Constructor with chosen thickness
          */
-        Rectangle(Vector2D pos, Vector2D size, Color color, int thickness);
+        Rectangle(Vector2D pos, Vector2D size, ColorSt color, int thickness);
         /*
          * Constructor with thickness with value 1
          */
-        Rectangle(Vector2D pos, Vector2D size, Color color);
+        Rectangle(Vector2D pos, Vector2D size, ColorSt color);
         ~Rectangle() override = default;
         /*
          * Draw this rectangle on window

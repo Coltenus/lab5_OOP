@@ -17,11 +17,11 @@ namespace l5 {
         /*
          * Constructor with chosen thickness
          */
-        Circle(Vector2D pos, int radius, Color color, int thickness);
+        Circle(Vector2D pos, int radius, ColorSt ColorSt, int thickness);
         /*
          * Constructor with thickness with value 1
          */
-        Circle(Vector2D pos, int radius, Color color);
+        Circle(Vector2D pos, int radius, ColorSt color);
         ~Circle() override = default;
         /*
          * Draw this circle on window
