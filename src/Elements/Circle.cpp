@@ -28,12 +28,19 @@ namespace l5 {
         counter = _radius;
         if(_isSelected) _color.a = 120;
         else _color.a = 255;
-        do {
-            if(pos == nullptr)
-                DrawCircleLines(_pos.x, _pos.y, counter, {_color.r, _color.g, _color.b, _color.a});
-            else DrawCircleLines(pos->x, pos->y, counter, {_color.r, _color.g, _color.b, _color.a});
-            counter--;
-        } while (counter > _radius - _thickness);
+        if(_thickness < _radius){
+            do {
+                if (pos == nullptr)
+                    DrawCircleLines(_pos.x, _pos.y, counter, {_color.r, _color.g, _color.b, _color.a});
+                else DrawCircleLines(pos->x, pos->y, counter, {_color.r, _color.g, _color.b, _color.a});
+                counter--;
+            } while (counter > _radius - _thickness);
+        }
+        else {
+            if (pos == nullptr)
+                DrawCircle(_pos.x, _pos.y, _radius, {_color.r, _color.g, _color.b, _color.a});
+            else DrawCircle(pos->x, pos->y, _radius, {_color.r, _color.g, _color.b, _color.a});
+        }
     }
 
     bool Circle::CheckPosition(Vector2D mouse, Vector2D* pos) {
@@ -70,5 +77,13 @@ namespace l5 {
         else if(p > x2)
             return x2;
         else return p;
+    }
+
+    int *Circle::GetRadiusP() {
+        return &_radius;
+    }
+
+    int *Circle::GetThicknessP() {
+        return &_thickness;
     }
 } // l5

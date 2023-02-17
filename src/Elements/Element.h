@@ -45,6 +45,9 @@ namespace l5 {
         void StartRemoval();
         bool NeedRemoval();
         int GetType();
+        unsigned char* GetRedP();
+        unsigned char* GetGreenP();
+        unsigned char* GetBlueP();
     };
 
 } // l5

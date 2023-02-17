@@ -20,6 +20,10 @@ namespace l5 {
         FigureBuilder();
         ~FigureBuilder();
         Element* CreateFigure(Vector2D pos, std::vector<Element*>* elements = nullptr, Vector2D size = {0, 0});
+        void Draw(Vector2D* pos) const;
+        Circle* GetCircle();
+        Rectangle* GetRectangle();
+        Group* GetGroup();
     };
 
 } // l5

@@ -11,7 +11,6 @@
 #include "MenuObjects/mobjects.h"
 
 namespace l5 {
-#define OBJECTS_DIST 15
 
     class Menu {
     private:
@@ -39,6 +38,9 @@ namespace l5 {
                 break;
             case 2:
                 reinterpret_cast<ButtonMO*>(object)->SetFontHeight(_fontH, _isXAxis);
+                break;
+            case 5:
+                reinterpret_cast<SliderMO<T>*>(object)->SetFontHeight(_fontH, _isXAxis);
                 break;
         }
         objects.push_back(object);

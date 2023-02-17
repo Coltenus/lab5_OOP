@@ -12,7 +12,7 @@
 
 namespace l5 {
 
-    template<typename T>
+    template<typename T = int>
     class LabelMO : public MenuObject {
     private:
         std::string _text;

@@ -42,6 +42,8 @@ namespace l5 {
          * Find closest value inside range between x1 and x2
          */
         static int ClosestValue(int p, int x1, int x2);
+        int* GetRadiusP();
+        int* GetThicknessP();
     };
 
 } // l5

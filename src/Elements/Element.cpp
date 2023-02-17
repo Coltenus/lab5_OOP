@@ -61,4 +61,16 @@ namespace l5 {
     int Element::GetType() {
         return _type;
     }
+
+    unsigned char *Element::GetRedP() {
+        return &_color.r;
+    }
+
+    unsigned char *Element::GetGreenP() {
+        return &_color.g;
+    }
+
+    unsigned char *Element::GetBlueP() {
+        return &_color.b;
+    }
 } // l5

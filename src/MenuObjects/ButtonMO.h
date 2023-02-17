@@ -8,7 +8,7 @@
 #include "MenuObject.h"
 #include <string>
 #include <raylib.h>
-#include "../ButtonCommands/ButtonCommand.h"
+#include "../Commands/ButtonCommand.h"
 
 namespace l5 {
 #define BTN_SIZE_OFFSET 3

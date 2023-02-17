@@ -39,6 +39,9 @@ namespace l5 {
          * Check if the rectangle is inside given area
          */
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
+        float* GetSizeXP();
+        float* GetSizeYP();
+        int* GetThickness();
     };
 
 } // l5

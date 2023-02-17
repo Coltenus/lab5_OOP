@@ -7,5 +7,8 @@
 
 #include "LabelMO.h"
 #include "ButtonMO.h"
+#include "PreviewMO.h"
+#include "EditorMO.h"
+#include "SliderMO.h"
 
 #endif //LAB5_MOBJECTS_H
