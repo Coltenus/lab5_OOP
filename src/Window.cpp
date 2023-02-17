@@ -9,7 +9,7 @@ namespace l5 {
             : _color(color){
         SetConfigFlags(flags);
         InitWindow(size.x, size.y, title);
-        SetTargetFPS(144);
+        SetTargetFPS(60);
     }
 
     Window *Window::CreateWindow(const char *title, Vector2 size, unsigned int flags, Color color) {
