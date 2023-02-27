@@ -70,6 +70,7 @@ namespace l5 {
         else SetLength(_fontH*3);
     }
 
+    template<> void SliderMO<float>::Draw(Vector2D pos);
 } // l5
 
 #endif //LAB5_SLIDERMO_H
