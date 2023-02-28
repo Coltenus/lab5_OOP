@@ -1,12 +1,8 @@
 #include <vector>
-#include <iostream>
 #include <raylib.h>
 #include "src/Window.h"
 #include "src/Elements/Element.h"
 #include "src/common.h"
-#include "src/Menu.h"
-#include "src/MenuObjects/mobjects.h"
-#include "src/Commands/bcommands.h"
 #include "src/FigureBuilder.h"
 
 l5::Window* l5::Window::pWindow = nullptr;
