@@ -19,6 +19,7 @@ namespace l5 {
     public:
         static bool firstPointSelected;
         static std::vector<Element*> FindElements(Vector2D p1, Vector2D p2, std::vector<Element*>& elements);
+        static Element* FindElement(Vector2D p, std::vector<Element*>& elements);
         static Vector2D FindCorrectPos(Vector2D p1, Vector2D p2);
         static Vector2D FindSize(Vector2D p1, Vector2D p2);
         static Element* ConvertChildClass(Element* element);
@@ -44,6 +45,7 @@ namespace l5 {
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
         void SetSize(Vector2D size);
         void SetElements(std::vector<Element*>& elements);
+        void AddElement(Element*);
     };
 
 } // l5

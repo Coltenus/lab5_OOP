@@ -87,11 +87,26 @@ namespace l5 {
         std::vector<Element *> result, changedElements;
 
         for(auto& el: elements)
-            if(el->CheckPosition(p1, p2))
+            if(el->CheckPosition(p1, p2)) {
                 result.push_back(el);
+                ReplacePointer(el, elements);
+            }
             else changedElements.push_back(el);
 
         elements = changedElements;
+
+        return result;
+    }
+
+    Element *Group::FindElement(Vector2D p, std::vector<Element *> &elements) {
+        Element* result = nullptr;
+        bool isFirst = true;
+
+        for(auto& el: elements)
+            if(isFirst && el->CheckPosition({p.x + WORKSPACE_X_ST, p.y + WORKSPACE_Y_ST})) {
+                result = el;
+                isFirst = false;
+            }
 
         return result;
     }
@@ -136,6 +151,7 @@ namespace l5 {
                 _elementsPos.push_back({buf.x - _pos.x, buf.y - _pos.y});
             }
         }
+        _nextElement = nullptr;
     }
 
     Element *Group::ConvertChildClass(Element *element) {
@@ -152,5 +168,11 @@ namespace l5 {
                 break;
         }
         return buf;
+    }
+
+    void Group::AddElement(Element *el) {
+        _elements.push_back(el);
+        auto buf = el->GetPos();
+        _elementsPos.push_back({buf.x - _pos.x, buf.y - _pos.y});
     }
 } // l5

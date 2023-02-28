@@ -6,6 +6,7 @@
 #define LAB5_ELEMENT_H
 
 #include "../common.h"
+#include <vector>
 
 namespace l5 {
 
@@ -18,6 +19,10 @@ namespace l5 {
 
     public:
         static bool elementSelected, resetSelection;
+        static Element *selectedElement, *lastElement;
+        static void HandleSelection();
+        static void ReplacePointer(Element* el, std::vector<Element*>& vec);
+        Element* _nextElement;
         Element(int type, Vector2D pos, ColorSt color);
         Element(Element& element);
         Element(Element* element);
@@ -48,6 +53,11 @@ namespace l5 {
         unsigned char* GetRedP();
         unsigned char* GetGreenP();
         unsigned char* GetBlueP();
+        void HandleElementSelection(bool endSelection = true);
+        void SelectionActivate();
+
+    private:
+        void SetPointer();
     };
 
 } // l5

@@ -6,6 +6,8 @@
 #define LAB5_WINDOW_H
 
 #include <raylib.h>
+#include "FigureBuilder.h"
+#include "Menu.h"
 
 namespace l5 {
 
@@ -13,6 +15,12 @@ namespace l5 {
     private:
         Color _color;
         Window(const char* title, Vector2 size, unsigned int flags, Color color);
+        FigureBuilder _builder;
+        std::vector<Element*> _elements;
+        bool _done;
+        bool _clear;
+        Vector2 _mousePos;
+        std::vector<l5::Menu*> _menus;
 
     public:
         static Window* pWindow;
@@ -22,6 +30,10 @@ namespace l5 {
         ~Window();
         void Begin();
         void End();
+        void HandleControls();
+        void Update();
+        void Draw();
+        bool ShouldEnd();
     };
 
 } // l5
