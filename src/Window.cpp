@@ -28,6 +28,8 @@ namespace l5 {
 
         _menus.push_back(new l5::Menu({0, HEIGHT - 30}, {WIDTH, 30}, {50, 220, 30, 255}, true));
         _menus[2]->Add(new l5::LabelMO<Vector2>("Mouse position: %4.f, %4.f", &_mousePos));
+
+        _iterator = new ElementIterator(_elements, true);
     }
 
     Window *Window::CreateWindow(const char *title, Vector2 size, unsigned int flags, Color color) {
@@ -38,6 +40,9 @@ namespace l5 {
     }
 
     Window::~Window() {
+        delete _iterator;
+        _iterator = nullptr;
+
         for(auto el: _elements)
             delete el;
 
@@ -151,20 +156,7 @@ namespace l5 {
             if(_builder.mode > 3) _builder.mode = 0;
         }
         else if(IsKeyPressed(KEY_TAB)) {
-            if(Element::selectedElement) {
-                Element::selectedElement->HandleElementSelection(false);
-                if (Element::selectedElement->_nextElement) {
-                    Element::selectedElement = Element::selectedElement->_nextElement;
-                    Element::selectedElement->SelectionActivate();
-                } else {
-                    Element::HandleSelection();
-                    Element::selectedElement = nullptr;
-                }
-            }
-            else if(_elements.size() > 0) {
-                Element::selectedElement = *_elements.begin();
-                Element::selectedElement->SelectionActivate();
-            }
+            Element::selectedElement = _iterator->NextElement();
         }
     }
 

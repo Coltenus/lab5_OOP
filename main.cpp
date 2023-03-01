@@ -11,6 +11,7 @@ bool l5::Element::resetSelection = false;
 l5::Element* l5::Element::selectedElement = nullptr;
 l5::Element* l5::Element::lastElement = nullptr;
 bool l5::Group::firstPointSelected = false;
+bool l5::ElementIterator::resetValues = false;
 
 int main(int, char**)
 {
