@@ -16,13 +16,13 @@ namespace l5 {
         Vector2D _pos;
         ColorSt _color;
         bool _isSelected, _needRemoval;
+        Element* _nextElement;
 
     public:
         static bool elementSelected, resetSelection;
         static Element *selectedElement, *lastElement;
         static void HandleSelection();
         static void ReplacePointer(Element* el, std::vector<Element*>& vec);
-        Element* _nextElement;
         Element(int type, Vector2D pos, ColorSt color);
         Element(Element& element);
         Element(Element* element);
@@ -58,6 +58,8 @@ namespace l5 {
 
     private:
         void SetPointer();
+
+        friend class ElementIterator;
     };
 
 } // l5

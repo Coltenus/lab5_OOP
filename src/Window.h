@@ -8,6 +8,7 @@
 #include <raylib.h>
 #include "FigureBuilder.h"
 #include "Menu.h"
+#include "ElementIterator.h"
 
 namespace l5 {
 
@@ -21,6 +22,7 @@ namespace l5 {
         bool _clear;
         Vector2 _mousePos;
         std::vector<l5::Menu*> _menus;
+        ElementIterator* _iterator;
 
     public:
         static Window* pWindow;

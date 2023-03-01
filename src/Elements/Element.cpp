@@ -4,6 +4,7 @@
 
 #include "Element.h"
 #include <raylib.h>
+#include "../ElementIterator.h"
 
 namespace l5 {
     Element::Element(int type, Vector2D pos, ColorSt color)
@@ -45,6 +46,7 @@ namespace l5 {
                 }
                 HandleElementSelection();
                 lastClickElement = nullptr;
+                ElementIterator::resetValues = true;
             }
         }
         if(IsKeyPressed(KEY_DELETE) && _isSelected) {
@@ -52,6 +54,7 @@ namespace l5 {
             _isSelected = false;
             resetSelection = true;
             selectedElement = nullptr;
+            ElementIterator::resetValues = true;
         }
     }
 
