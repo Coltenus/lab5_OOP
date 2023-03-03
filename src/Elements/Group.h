@@ -48,6 +48,7 @@ namespace l5 {
         void SetElements(std::vector<Element*>& elements);
         void AddElement(Element*);
         void ClearElements();
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = false, bool needColor = false) override;
     };
 
 } // l5

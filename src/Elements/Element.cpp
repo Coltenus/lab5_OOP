@@ -152,4 +152,22 @@ namespace l5 {
         if(_nextElement) result = result && _nextElement->_previousElement == element;
         return result;
     }
+
+    std::string Element::GetTextData(Vector2D* pos, bool needPos, bool needColor) {
+        std::string result;
+        static char buffer[20];
+        snprintf(buffer, 20, "type=%d ", _type);
+        result += buffer;
+        if(needPos) {
+            if(pos)
+                snprintf(buffer, 20, "pos=%d,%d ", (int)pos->x - WORKSPACE_X_ST, (int)pos->y - WORKSPACE_Y_ST);
+            else snprintf(buffer, 20, "pos=%d,%d ", (int)_pos.x - WORKSPACE_X_ST, (int)_pos.y - WORKSPACE_Y_ST);
+            result += buffer;
+        }
+        if(needColor) {
+            snprintf(buffer, 20, "color=%02X%02X%02X ", _color.r, _color.g, _color.b);
+            result += buffer;
+        }
+        return result;
+    }
 } // l5

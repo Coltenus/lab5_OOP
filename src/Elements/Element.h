@@ -7,6 +7,7 @@
 
 #include "../common.h"
 #include <vector>
+#include <string>
 
 namespace l5 {
 
@@ -59,6 +60,7 @@ namespace l5 {
         void HandleElementSelection(bool endSelection = true);
         void SelectionActivate();
         bool IsSame(Element* element);
+        virtual std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true);
 
     private:
         void SetPointer();

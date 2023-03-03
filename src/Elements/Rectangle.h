@@ -44,6 +44,7 @@ namespace l5 {
         float* GetSizeXP();
         float* GetSizeYP();
         int* GetThickness();
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
     };
 
 } // l5

@@ -200,4 +200,26 @@ namespace l5 {
         _elements.clear();
         _elementsPos.clear();
     }
+
+    std::string Group::GetTextData(Vector2D* pos, bool needPos, bool needColor) {
+        std::string result("Group ");
+        static Vector2D vec;
+        if(pos)
+            result += Element::GetTextData(pos, needColor, needColor) + "{";
+        else result += Element::GetTextData(nullptr, needColor, needColor) + "{";
+        int counter = 0;
+        for(auto& el: _elements) {
+            if(pos) {
+                vec = {pos->x + _elementsPos[counter].x, pos->y + _elementsPos[counter].y};
+                result += "\n\t" + el->GetTextData(&vec);
+            }
+            else {
+                vec = {_pos.x + _elementsPos[counter].x, _pos.y + _elementsPos[counter].y};
+                result += "\n\t" + el->GetTextData(&vec);
+            }
+            counter++;
+        }
+        result += "}";
+        return result;
+    }
 } // l5

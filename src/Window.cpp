@@ -5,13 +5,17 @@
 #include "Window.h"
 #include "Commands/ValueSetBC.h"
 
+#ifdef __unix
+#define fopen_s(pFile,filename,mode) ((*(pFile))=fopen((filename),(mode)))==NULL
+#endif
+
 l5::OpCode l5::ElementsHistory::opcode = None;
 int l5::ElementsHistory::firstPos = -1;
 std::vector<int> l5::ElementsHistory::otherPos;
 
 namespace l5 {
     Window::Window(const char *title, Vector2 size, unsigned int flags, Color color)
-            : _color(color), _done(false), _clear(true) {
+            : _color(color), _done(false), _clear(true), _saveData(false) {
         SetConfigFlags(flags);
         InitWindow(size.x, size.y, title);
         SetTargetFPS(60);
@@ -19,6 +23,7 @@ namespace l5 {
         _menus.push_back(new l5::Menu({0, 0}, {WIDTH, 40}, {50, 220, 30, 255}, true));
         _menus[0]->Add(new l5::LabelMO("Mode: %d", &_builder.mode));
         _menus[0]->Add(new l5::ButtonMO("Clear", new l5::ValueSetBC<bool>(&_clear, true)));
+        _menus[0]->Add(new l5::ButtonMO("Save data", new l5::ValueSetBC<bool>(&_saveData, true)));
         _menus[0]->Add(new l5::ButtonMO("Exit", new l5::ValueSetBC<bool>(&_done, true)));
 
         _menus.push_back(new l5::Menu({WIDTH - 300, 40}, {400, HEIGHT - 70}, {20, 200, 140, 255}, false, 30));
@@ -52,7 +57,9 @@ namespace l5 {
         _iterator = nullptr;
 
         for(auto el: _elements)
+        {
             delete el;
+        }
 
         for(l5::Menu* el: _menus)
             delete el;
@@ -211,6 +218,20 @@ namespace l5 {
             Element::HandleSelection();
             Element::selectedElement = nullptr;
             _history->Clear();
+        }
+
+        if(_saveData) {
+            FILE* file;
+            if(!fopen_s(&file, "figures_data.txt", "wt")) {
+                std::string buffer;
+                for(auto& el: _elements) {
+                    if(el->GetType() != 3) buffer = el->GetTextData();
+                    else buffer = el->GetTextData(nullptr, false, false);
+                    fprintf(file, "%s\n", buffer.c_str());
+                }
+                fclose(file);
+            }
+            _saveData = false;
         }
 
         for(auto& el: _menus)

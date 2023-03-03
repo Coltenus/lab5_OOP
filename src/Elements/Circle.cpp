@@ -99,4 +99,12 @@ namespace l5 {
     int *Circle::GetThicknessP() {
         return &_thickness;
     }
+
+    std::string Circle::GetTextData(Vector2D* pos, bool needPos, bool needColor) {
+        static char buffer[20];
+        snprintf(buffer, 20, "rad=%d th=%d ", _radius, _thickness);
+        if(pos)
+            return std::string("Circle ") + Element::GetTextData(pos, needPos, needColor) + buffer;
+        else return std::string("Circle ") + Element::GetTextData(nullptr, needPos, needColor) + buffer;
+    }
 } // l5

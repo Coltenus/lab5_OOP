@@ -78,4 +78,12 @@ namespace l5 {
         _thickness = reinterpret_cast<Rectangle*>(element)->_thickness;
         return *this;
     }
+
+    std::string Rectangle::GetTextData(Vector2D* pos, bool needPos, bool needColor) {
+        static char buffer[20];
+        snprintf(buffer, 20, "size=%d,%d th=%d ", (int)_size.x, (int)_size.y, _thickness);
+        if(pos)
+            return std::string("Rectangle ") + Element::GetTextData(pos, needPos, needColor) + buffer;
+        else return std::string("Rectangle ") + Element::GetTextData(nullptr, needPos, needColor) + buffer;
+    }
 } // l5

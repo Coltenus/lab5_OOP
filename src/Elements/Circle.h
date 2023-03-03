@@ -46,6 +46,7 @@ namespace l5 {
         static int ClosestValue(int p, int x1, int x2);
         int* GetRadiusP();
         int* GetThicknessP();
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
     };
 
 } // l5
