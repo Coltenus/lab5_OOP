@@ -37,5 +37,3 @@ int main(int, char**)
 
     return 0;
 }
-
-///TODO: Output data into text file.
