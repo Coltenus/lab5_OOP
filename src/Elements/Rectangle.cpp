@@ -64,4 +64,18 @@ namespace l5 {
     int *Rectangle::GetThickness() {
         return &_thickness;
     }
+
+    bool Rectangle::operator==(Element *element) {
+        return Element::operator==(element)
+        && _size.x == reinterpret_cast<Rectangle*>(element)->_size.x
+        && _size.y == reinterpret_cast<Rectangle*>(element)->_size.y
+        && _thickness == reinterpret_cast<Rectangle*>(element)->_thickness;
+    }
+
+    Rectangle &Rectangle::operator=(Element *element) {
+        Element::operator=(element);
+        _size = reinterpret_cast<Rectangle*>(element)->_size;
+        _thickness = reinterpret_cast<Rectangle*>(element)->_thickness;
+        return *this;
+    }
 } // l5

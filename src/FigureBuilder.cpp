@@ -39,6 +39,7 @@ namespace l5 {
             result->SetPos(pos);
             if (mode == 3 && elements)
                 reinterpret_cast<Group *>(result)->SetElements(*elements);
+            result->SetPointer();
         }
         return result;
     }
@@ -70,5 +71,21 @@ namespace l5 {
 
     Group *FigureBuilder::GetGroup() {
         return _group;
+    }
+
+    Element *FigureBuilder::ConvertChildClass(Element *element) {
+        Element* buf = nullptr;
+        switch (element->GetType()) {
+            case 1:
+                buf = new Circle(reinterpret_cast<Circle*>(element));
+                break;
+            case 2:
+                buf = new Rectangle(reinterpret_cast<Rectangle*>(element));
+                break;
+            case 3:
+                buf = new Group(reinterpret_cast<Group*>(element));
+                break;
+        }
+        return buf;
     }
 } // l5

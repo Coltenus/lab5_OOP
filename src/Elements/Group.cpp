@@ -5,6 +5,8 @@
 #include "Group.h"
 #include "elements.h"
 #include <raylib.h>
+#include "../FigureBuilder.h"
+#include "../ElementsHistory.h"
 
 namespace l5 {
     Group::Group(Vector2D pos, Vector2D size, std::vector<Element *>& elements)
@@ -19,7 +21,7 @@ namespace l5 {
     Group::Group(Group &group)
     : Element(group), _size(group._size), _elementsPos(group._elementsPos) {
         for(Element* el: group._elements) {
-            Element* buf = ConvertChildClass(el);
+            Element* buf = FigureBuilder::ConvertChildClass(el);
             if(buf) {
                 _elements.push_back(buf);
             }
@@ -29,7 +31,7 @@ namespace l5 {
     Group::Group(Group *group)
     : Element(group), _size(group->_size), _elementsPos(group->_elementsPos) {
         for(Element* el: group->_elements) {
-            Element* buf = ConvertChildClass(el);
+            Element* buf = FigureBuilder::ConvertChildClass(el);
             if(buf) {
                 _elements.push_back(buf);
             }
@@ -86,6 +88,12 @@ namespace l5 {
     std::vector<Element *> Group::FindElements(Vector2D p1, Vector2D p2, std::vector<Element *> &elements) {
         std::vector<Element *> result, changedElements;
 
+        for(auto el = elements.begin(); el != elements.end(); el++) {
+            if((*el)->CheckPosition(p1, p2)) {
+                ElementsHistory::otherPos.push_back(el - elements.begin());
+            }
+        }
+
         for(auto& el: elements)
             if(el->CheckPosition(p1, p2)) {
                 result.push_back(el);
@@ -139,7 +147,7 @@ namespace l5 {
         _elements.clear();
         _elementsPos.clear();
         for(Element* el: elements) {
-            Element* buf = ConvertChildClass(el);
+            Element* buf = FigureBuilder::ConvertChildClass(el);
             if(buf) {
                 _elements.push_back(buf);
             }
@@ -154,25 +162,42 @@ namespace l5 {
         _nextElement = nullptr;
     }
 
-    Element *Group::ConvertChildClass(Element *element) {
-        Element* buf = nullptr;
-        switch (element->GetType()) {
-            case 1:
-                buf = new Circle(reinterpret_cast<Circle*>(element));
-                break;
-            case 2:
-                buf = new Rectangle(reinterpret_cast<Rectangle*>(element));
-                break;
-            case 3:
-                buf = new Group(reinterpret_cast<Group*>(element));
-                break;
-        }
-        return buf;
-    }
-
     void Group::AddElement(Element *el) {
         _elements.push_back(el);
         auto buf = el->GetPos();
         _elementsPos.push_back({buf.x - _pos.x, buf.y - _pos.y});
+    }
+
+    bool Group::operator==(Element *element) {
+        return Element::operator==(element)
+        && _size.x == reinterpret_cast<Group*>(element)->_size.x
+        && _size.y == reinterpret_cast<Group*>(element)->_size.y
+        && _elements.size() == reinterpret_cast<Group*>(element)->_elements.size();
+    }
+
+    Group &Group::operator=(Element *element) {
+        Element::operator=(element);
+        _size = reinterpret_cast<Group*>(element)->_size;
+        ClearElements();
+        for(Element* el: reinterpret_cast<Group*>(element)->_elements) {
+            Element* buf = FigureBuilder::ConvertChildClass(el);
+            if(buf) {
+                _elements.push_back(buf);
+            }
+        }
+        for(Vector2D el: reinterpret_cast<Group*>(element)->_elementsPos)
+            _elementsPos.push_back(el);
+        return *this;
+    }
+
+    Group::~Group() {
+        ClearElements();
+    }
+
+    void Group::ClearElements() {
+        for(Element* el: _elements)
+            delete el;
+        _elements.clear();
+        _elementsPos.clear();
     }
 } // l5

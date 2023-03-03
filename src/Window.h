@@ -9,6 +9,7 @@
 #include "FigureBuilder.h"
 #include "Menu.h"
 #include "ElementIterator.h"
+#include "ElementsHistory.h"
 
 namespace l5 {
 
@@ -23,6 +24,7 @@ namespace l5 {
         Vector2 _mousePos;
         std::vector<l5::Menu*> _menus;
         ElementIterator* _iterator;
+        ElementsHistory* _history;
 
     public:
         static Window* pWindow;

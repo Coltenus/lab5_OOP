@@ -23,6 +23,19 @@ namespace l5 {
     Circle::Circle(Circle *circle)
     : Element(circle), _radius(circle->_radius), _thickness(circle->_thickness) {}
 
+    bool Circle::operator==(Element *element) {
+        return Element::operator==(element)
+        && _radius == reinterpret_cast<Circle*>(element)->_radius
+        && _thickness == reinterpret_cast<Circle*>(element)->_thickness;
+    }
+
+    Circle &Circle::operator=(Element *element) {
+        Element::operator=(element);
+        _radius = reinterpret_cast<Circle*>(element)->_radius;
+        _thickness = reinterpret_cast<Circle*>(element)->_thickness;
+        return *this;
+    }
+
     void Circle::Draw(Vector2D* pos) {
         static int counter;
         counter = _radius;

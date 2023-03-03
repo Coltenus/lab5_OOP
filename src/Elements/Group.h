@@ -22,14 +22,15 @@ namespace l5 {
         static Element* FindElement(Vector2D p, std::vector<Element*>& elements);
         static Vector2D FindCorrectPos(Vector2D p1, Vector2D p2);
         static Vector2D FindSize(Vector2D p1, Vector2D p2);
-        static Element* ConvertChildClass(Element* element);
         /*
          * This constructor has argument "elements" which is contains elements in selected area
          */
         Group(Vector2D pos, Vector2D size, std::vector<Element*>& elements);
         Group(Group& group);
         Group(Group* group);
-        ~Group() override = default;
+        bool operator==(Element* element) override;
+        Group& operator=(Element* element) override;
+        ~Group() override;
         /*
          * Draw this group on window
          * If position is not null, then circle will be drawn there
@@ -46,6 +47,7 @@ namespace l5 {
         void SetSize(Vector2D size);
         void SetElements(std::vector<Element*>& elements);
         void AddElement(Element*);
+        void ClearElements();
     };
 
 } // l5

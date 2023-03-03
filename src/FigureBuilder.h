@@ -16,6 +16,7 @@ namespace l5 {
         Group* _group;
 
     public:
+        static Element* ConvertChildClass(Element* element);
         int mode;
         FigureBuilder();
         ~FigureBuilder();

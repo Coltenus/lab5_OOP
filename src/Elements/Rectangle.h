@@ -25,6 +25,8 @@ namespace l5 {
         Rectangle(Vector2D pos, Vector2D size, ColorSt color);
         Rectangle(Rectangle& rectangle);
         Rectangle(Rectangle* rectangle);
+        bool operator==(Element* element) override;
+        Rectangle& operator=(Element* element) override;
         ~Rectangle() override = default;
         /*
          * Draw this rectangle on window

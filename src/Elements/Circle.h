@@ -24,6 +24,8 @@ namespace l5 {
         Circle(Vector2D pos, int radius, ColorSt color);
         Circle(Circle& circle);
         Circle(Circle* circle);
+        bool operator==(Element* element) override;
+        Circle& operator=(Element* element) override;
         ~Circle() override = default;
         /*
          * Draw this circle on window

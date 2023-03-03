@@ -16,16 +16,19 @@ namespace l5 {
         Vector2D _pos;
         ColorSt _color;
         bool _isSelected, _needRemoval;
-        Element* _nextElement;
+        Element *_nextElement, *_previousElement;
 
     public:
         static bool elementSelected, resetSelection;
         static Element *selectedElement, *lastElement;
         static void HandleSelection();
         static void ReplacePointer(Element* el, std::vector<Element*>& vec);
+        static void InsertPointer(std::vector<Element*>& vec, int pos);
         Element(int type, Vector2D pos, ColorSt color);
         Element(Element& element);
         Element(Element* element);
+        virtual bool operator==(Element* element);
+        virtual Element& operator=(Element* element);
         virtual ~Element() = default;
         /*
          * Draw this element on window
@@ -55,11 +58,14 @@ namespace l5 {
         unsigned char* GetBlueP();
         void HandleElementSelection(bool endSelection = true);
         void SelectionActivate();
+        bool IsSame(Element* element);
 
     private:
         void SetPointer();
 
         friend class ElementIterator;
+        friend class FigureBuilder;
+        friend class ElementsHistory;
     };
 
 } // l5

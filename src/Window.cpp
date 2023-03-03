@@ -5,9 +5,13 @@
 #include "Window.h"
 #include "Commands/ValueSetBC.h"
 
+l5::OpCode l5::ElementsHistory::opcode = None;
+int l5::ElementsHistory::firstPos = -1;
+std::vector<int> l5::ElementsHistory::otherPos;
+
 namespace l5 {
     Window::Window(const char *title, Vector2 size, unsigned int flags, Color color)
-            : _color(color), _done(false), _clear(true){
+            : _color(color), _done(false), _clear(true) {
         SetConfigFlags(flags);
         InitWindow(size.x, size.y, title);
         SetTargetFPS(60);
@@ -30,6 +34,7 @@ namespace l5 {
         _menus[2]->Add(new l5::LabelMO<Vector2>("Mouse position: %4.f, %4.f", &_mousePos));
 
         _iterator = new ElementIterator(_elements, true);
+        _history = new ElementsHistory(_elements);
     }
 
     Window *Window::CreateWindow(const char *title, Vector2 size, unsigned int flags, Color color) {
@@ -40,6 +45,9 @@ namespace l5 {
     }
 
     Window::~Window() {
+        delete _history;
+        _history = nullptr;
+
         delete _iterator;
         _iterator = nullptr;
 
@@ -78,6 +86,9 @@ namespace l5 {
             if(mouse.x >= WORKSPACE_X_ST && mouse.x <= WORKSPACE_X_END
                && mouse.y >= WORKSPACE_Y_ST && mouse.y <= WORKSPACE_Y_END) {
                 l5::Element *buf;
+                if(_builder.mode == 3) ElementsHistory::opcode = Assemble;
+                else ElementsHistory::opcode = Add;
+                ElementsHistory::firstPos = _elements.size();
                 switch (_builder.mode) {
                     case 1:
                     case 2:
@@ -98,6 +109,10 @@ namespace l5 {
                         }
                         break;
                 }
+                if(ElementsHistory::opcode == Assemble)
+                    ElementsHistory::firstPos -= ElementsHistory::otherPos.size();
+                if(l5::Group::firstPointSelected)
+                    ElementsHistory::opcode = None;
             }
             else {
                 l5::Group::firstPointSelected = false;
@@ -109,6 +124,7 @@ namespace l5 {
             _elements.clear();
             Element::HandleSelection();
             Element::selectedElement = nullptr;
+            _history->Clear();
         }
         else if((bufCh = GetCharPressed()) >= 48 && bufCh <= 51)
             _builder.mode = bufCh - 48;
@@ -118,15 +134,19 @@ namespace l5 {
                                                                                      _elements));
             if(l5::Element::selectedElement) {
                 if(bufElement) {
-                    int counter = 0;
-                    for(l5::Element* el: _elements) {
-                        if (el == l5::Element::selectedElement) {
-                            break;
-                        }
-                        counter++;
+                    auto el = _elements.begin();
+                    while(*el != Element::selectedElement) {
+                        el++;
                     }
-                    if(counter != _elements.size()) {
-                        _elements.erase(_elements.begin()+counter);
+                    if(el != _elements.end()) {
+                        ElementsHistory::opcode = AddToGroup;
+                        ElementsHistory::otherPos.push_back(el - _elements.begin());
+                        _elements.erase(el);
+                        el = _elements.begin();
+                        while(*el != bufElement) {
+                            el++;
+                        }
+                        ElementsHistory::firstPos = (int)(_elements.begin() - el);
                         bufElement->AddElement(l5::Element::selectedElement);
                         Element::ReplacePointer(l5::Element::selectedElement, _elements);
                     }
@@ -158,14 +178,24 @@ namespace l5 {
         else if(IsKeyPressed(KEY_TAB)) {
             Element::selectedElement = _iterator->NextElement();
         }
+        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z))
+            _history->Undo();
+        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Y))
+            _history->Redo();
     }
 
     void Window::Update() {
+        if(_history->Check()) {
+            _history->AddUndo();
+        }
+
         for(auto& el: _elements)
             el->Update();
 
         for(auto el = _elements.begin(); el != _elements.end() && _elements.size(); el++) {
             if((*el)->NeedRemoval()) {
+                ElementsHistory::opcode = Remove;
+                ElementsHistory::firstPos = el - _elements.begin();
                 Element::ReplacePointer(*el, _elements);
                 delete *el;
                 _elements.erase(el);
@@ -180,6 +210,7 @@ namespace l5 {
             _clear = false;
             Element::HandleSelection();
             Element::selectedElement = nullptr;
+            _history->Clear();
         }
 
         for(auto& el: _menus)

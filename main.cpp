@@ -38,5 +38,4 @@ int main(int, char**)
     return 0;
 }
 
-///TODO: Undo/redo ability.
-/// Output data into text file.
+///TODO: Output data into text file.

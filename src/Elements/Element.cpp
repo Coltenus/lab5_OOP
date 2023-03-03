@@ -8,20 +8,18 @@
 
 namespace l5 {
     Element::Element(int type, Vector2D pos, ColorSt color)
-    : _type(type), _pos(pos), _color(color), _isSelected(false), _needRemoval(false), _nextElement(nullptr) {
-        SetPointer();
+    : _type(type), _pos(pos), _color(color), _isSelected(false), _needRemoval(false), _nextElement(nullptr),
+    _previousElement(nullptr) {
     }
 
     Element::Element(Element &element)
     : _type(element._type), _pos(element._pos), _color(element._color), _isSelected(false), _needRemoval(false),
-    _nextElement(nullptr) {
-        SetPointer();
+    _nextElement(element._nextElement), _previousElement(element._nextElement) {
     }
 
     Element::Element(Element *element)
     : _type(element->_type), _pos(element->_pos), _color(element->_color), _isSelected(false), _needRemoval(false),
-    _nextElement(nullptr) {
-        SetPointer();
+    _nextElement(element->_nextElement), _previousElement(element->_nextElement) {
     }
 
     void Element::Update() {
@@ -105,18 +103,53 @@ namespace l5 {
     }
 
     void Element::ReplacePointer(Element *el, std::vector<Element *> &vec) {
-        if(*vec.begin() != el) {
-            auto iter = vec.begin();
-            while ((*iter)->_nextElement != el) {
-                iter++;
+        if(*vec.begin() != el && vec.begin()+1 != vec.end()) {
+            auto previous = el->_previousElement;
+            if(previous) previous->_nextElement = el->_nextElement;
+            if(el->_nextElement) el->_nextElement->_previousElement = previous;
+            if(el->_nextElement == nullptr) lastElement = previous;
+        }
+    }
+
+    void Element::InsertPointer(std::vector<Element *> &vec, int pos) {
+        if(vec.size() > 1 && pos < vec.size() && pos >= 0) {
+            if(pos > 0) {
+                if(pos < vec.size()-1)
+                    (*(vec.begin()+pos-1))->_nextElement = (*(vec.begin()+pos+1));
+                else (*(vec.begin()+pos-1))->_nextElement = nullptr;
             }
-            (*iter)->_nextElement = el->_nextElement;
-            if(el->_nextElement == nullptr) lastElement = *iter;
+            if(pos < vec.size()-1) {
+                if(pos-1 >= 0)
+                    (*(vec.begin()+pos+1))->_previousElement = (*(vec.begin()+pos-1));
+                else (*(vec.begin()+pos+1))->_previousElement = nullptr;
+            }
         }
     }
 
     void Element::SetPointer() {
+        _previousElement = lastElement;
         if(lastElement) lastElement->_nextElement = this;
         lastElement = this;
+    }
+
+    bool Element::operator==(Element *element) {
+        return _pos.x == element->_pos.x
+        && _pos.y == element->_pos.y
+        && (_nextElement == element->_nextElement
+            || _previousElement == element->_previousElement);
+    }
+
+    Element& Element::operator=(Element *element) {
+        _pos = element->_pos;
+        _nextElement = element->_nextElement;
+        _previousElement = element->_previousElement;
+        return *this;
+    }
+
+    bool Element::IsSame(Element* element) {
+        bool result = true;
+        if(_previousElement) result = _previousElement->_nextElement == element;
+        if(_nextElement) result = result && _nextElement->_previousElement == element;
+        return result;
     }
 } // l5
