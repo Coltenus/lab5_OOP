@@ -177,15 +177,15 @@ namespace l5 {
         else if(IsKeyPressed(KEY_TAB)) {
             Element::selectedElement = _iterator->NextElement();
         }
+        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_Z)) {
+            if(Element::selectedElement)
+                Element::selectedElement->HandleElementSelection();
+            _history->Redo();
+        }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z)) {
             if(Element::selectedElement)
                 Element::selectedElement->HandleElementSelection();
             _history->Undo();
-        }
-        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Y)) {
-            if(Element::selectedElement)
-                Element::selectedElement->HandleElementSelection();
-            _history->Redo();
         }
     }
 
