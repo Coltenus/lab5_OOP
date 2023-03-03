@@ -61,8 +61,6 @@ namespace l5 {
         void SelectionActivate();
         bool IsSame(Element* element);
         virtual std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true);
-
-    private:
         void SetPointer();
 
         friend class ElementIterator;

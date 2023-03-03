@@ -163,17 +163,9 @@ namespace l5 {
         }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_D)) {
             if(l5::Element::selectedElement) {
-                switch (l5::Element::selectedElement->GetType()) {
-                    case 1:
-                        _elements.push_back(new l5::Circle(reinterpret_cast<l5::Circle*>(l5::Element::selectedElement)));
-                        break;
-                    case 2:
-                        _elements.push_back(new l5::Rectangle(reinterpret_cast<l5::Rectangle*>(l5::Element::selectedElement)));
-                        break;
-                    case 3:
-                        _elements.push_back(new l5::Group(reinterpret_cast<l5::Group*>(l5::Element::selectedElement)));
-                        break;
-                }
+                Element* buf = FigureBuilder::ConvertChildClass(l5::Element::selectedElement);
+                buf->SetPointer();
+                _elements.push_back(buf);
                 l5::Element::selectedElement->HandleElementSelection();
             }
         }
@@ -185,10 +177,16 @@ namespace l5 {
         else if(IsKeyPressed(KEY_TAB)) {
             Element::selectedElement = _iterator->NextElement();
         }
-        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z))
+        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z)) {
+            if(Element::selectedElement)
+                Element::selectedElement->HandleElementSelection();
             _history->Undo();
-        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Y))
+        }
+        else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Y)) {
+            if(Element::selectedElement)
+                Element::selectedElement->HandleElementSelection();
             _history->Redo();
+        }
     }
 
     void Window::Update() {

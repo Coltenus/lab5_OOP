@@ -126,6 +126,7 @@ namespace l5 {
                 _buffer->fElement = FigureBuilder::ConvertChildClass(_current[buf.fPos]);
                 if((*_real)[buf.fPos] == Element::lastElement)
                     Element::lastElement = nullptr;
+                delete (*(_real->begin() + buf.fPos));
                 _real->erase(_real->begin()+buf.fPos);
                 break;
             case Remove:
@@ -148,9 +149,11 @@ namespace l5 {
                 _buffer->fElement = FigureBuilder::ConvertChildClass(_current[buf.fPos]);
                 if((*_real)[buf.fPos] == Element::lastElement)
                     Element::lastElement = nullptr;
+                delete (*(_real->begin() + buf.fPos));
                 _real->erase(_real->begin()+buf.fPos);
                 for(auto& el: buf.otherElements){
                     _real->insert(_real->begin() + el.first, FigureBuilder::ConvertChildClass(el.second));
+                    _buffer->otherElements.emplace_back(el.first, nullptr);
                     delete el.second;
                 }
                 break;
@@ -158,12 +161,28 @@ namespace l5 {
                 _buffer->opcode = Assemble;
                 _buffer->fPos = buf.fPos;
                 _buffer->fElement = nullptr;
+                {
+                    auto el = buf.otherElements.end();
+                    while (el != buf.otherElements.begin()){
+                        el--;
+                        _buffer->otherElements.emplace_back((*el).first,
+                                                            FigureBuilder::ConvertChildClass(_current[(*el).first]));
+                        delete (*(_real->begin() + (*el).first));
+                        _real->erase(_real->begin() + (*el).first);
+                    }
+                }
+                {
+                    auto other = _buffer->otherElements;
+                    _buffer->otherElements.clear();
+                    auto el = other.end();
+                    while (el != other.begin()){
+                        el--;
+                        _buffer->otherElements.emplace_back(*el);
+                    }
+                }
                 _real->insert(_real->begin()+buf.fPos, FigureBuilder::ConvertChildClass(buf.fElement));
                 delete buf.fElement;
-                for(auto& el: buf.otherElements){
-                    _buffer->otherElements.emplace_back(el.first, FigureBuilder::ConvertChildClass(_current[el.first]));
-                    _real->erase(_real->begin() + el.first);
-                }
+                Element::ReplacePointer((*(_real->begin()+buf.fPos)), *_real);
                 break;
             case AddToGroup:
                 _buffer->opcode = RemFromGroup;
@@ -174,6 +193,7 @@ namespace l5 {
                 delete buf.fElement;
                 _real->insert(_real->begin() + buf.otherElements[0].first,
                               FigureBuilder::ConvertChildClass(buf.otherElements[0].second));
+                Element::InsertPointer(*_real, buf.otherElements[0].first);
                 delete buf.otherElements[0].second;
                 break;
             case RemFromGroup:
@@ -184,6 +204,7 @@ namespace l5 {
                 delete buf.fElement;
                 _buffer->otherElements.emplace_back(buf.otherElements[0].first,
                                                     FigureBuilder::ConvertChildClass(_current[buf.otherElements[0].first]));
+                delete (*(_real->begin() + buf.otherElements[0].first));
                 _real->erase(_real->begin() + buf.otherElements[0].first);
                 break;
             case None:
