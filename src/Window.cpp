@@ -167,6 +167,9 @@ namespace l5 {
             if(_builder.mode < 0) _builder.mode = 3;
             if(_builder.mode > 3) _builder.mode = 0;
         }
+        else if(IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_TAB)) {
+            Element::selectedElement = _iterator->PreviousElement();
+        }
         else if(IsKeyPressed(KEY_TAB)) {
             Element::selectedElement = _iterator->NextElement();
         }

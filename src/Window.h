@@ -29,7 +29,7 @@ namespace l5 {
         static Window* pWindow;
         static Window* CreateWindow(const char* title, Vector2 size,
         unsigned int flags = FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE,
-        Color color = (Color){140, 140, 140, 255});
+        Color color = (Color){200, 200, 200, 255});
         ~Window();
         void Begin();
         void End();

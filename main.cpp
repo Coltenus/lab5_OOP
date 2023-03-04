@@ -4,6 +4,8 @@
 #include "src/Elements/Element.h"
 #include "src/common.h"
 #include "src/FigureBuilder.h"
+#include "src/ElementIterator.h"
+
 
 l5::Window* l5::Window::pWindow = nullptr;
 bool l5::Element::elementSelected = false;

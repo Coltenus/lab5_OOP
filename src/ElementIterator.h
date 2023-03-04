@@ -20,7 +20,9 @@ namespace l5 {
         explicit ElementIterator(std::vector<Element*>& vec, bool reset = false);
         Element* GetCurrentElement();
         Element* NextElement(bool isCycled = false);
-        bool IsEnd(bool isCycled = false);
+        Element* PreviousElement(bool isCycled = false);
+        bool IsEndNext(bool isCycled = false);
+        bool IsEndPrevious(bool isCycled = false);
     };
 
 } // l5

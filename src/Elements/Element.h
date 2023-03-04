@@ -33,13 +33,9 @@ namespace l5 {
         virtual ~Element() = default;
         virtual void Draw(Vector2D* pos = nullptr) = 0;
         void Update();
-        /*
-         * Check if a mouse clicked on the element
-         */
+        // Check if a mouse clicked on the element.
         virtual bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) = 0;
-        /*
-         * Check if the element is inside given area
-         */
+        // Check if the element is inside given area.
         virtual bool CheckPosition(Vector2D pos1, Vector2D pos2) = 0;
         // Get element position
         Vector2D GetPos();
