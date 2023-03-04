@@ -15,13 +15,16 @@ std::vector<int> l5::ElementsHistory::otherPos;
 
 namespace l5 {
     Window::Window(const char *title, Vector2 size, unsigned int flags, Color color)
-            : _color(color), _done(false), _clear(true), _saveData(false) {
+            : _color(color), _done(false), _clear(true), _saveData(false), _needUndo(false), _needRedo(false),
+            _needCopy(false) {
         SetConfigFlags(flags);
         InitWindow(size.x, size.y, title);
         SetTargetFPS(60);
 
         _menus.push_back(new l5::Menu({0, 0}, {WIDTH, 40}, {50, 220, 30, 255}, true));
         _menus[0]->Add(new l5::LabelMO("Mode: %d", &_builder.mode));
+        _menus[0]->Add(new l5::ButtonMO("Undo", new l5::ValueSetBC<bool>(&_needUndo, true)));
+        _menus[0]->Add(new l5::ButtonMO("Redo", new l5::ValueSetBC<bool>(&_needRedo, true)));
         _menus[0]->Add(new l5::ButtonMO("Clear", new l5::ValueSetBC<bool>(&_clear, true)));
         _menus[0]->Add(new l5::ButtonMO("Save data", new l5::ValueSetBC<bool>(&_saveData, true)));
         _menus[0]->Add(new l5::ButtonMO("Exit", new l5::ValueSetBC<bool>(&_done, true)));
@@ -126,12 +129,7 @@ namespace l5 {
             }
         }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_DELETE)) {
-            for(auto el: _elements)
-                delete el;
-            _elements.clear();
-            Element::HandleSelection();
-            Element::selectedElement = nullptr;
-            _history->Clear();
+            _clear = true;
         }
         else if((bufCh = GetCharPressed()) >= 48 && bufCh <= 51)
             _builder.mode = bufCh - 48;
@@ -162,12 +160,7 @@ namespace l5 {
             }
         }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_D)) {
-            if(l5::Element::selectedElement) {
-                Element* buf = FigureBuilder::ConvertChildClass(l5::Element::selectedElement);
-                buf->SetPointer();
-                _elements.push_back(buf);
-                l5::Element::selectedElement->HandleElementSelection();
-            }
+            _needCopy = true;
         }
         else if((wheel = GetMouseWheelMove()) != 0) {
             _builder.mode -= wheel;
@@ -178,14 +171,10 @@ namespace l5 {
             Element::selectedElement = _iterator->NextElement();
         }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_Z)) {
-            if(Element::selectedElement)
-                Element::selectedElement->HandleElementSelection();
-            _history->Redo();
+            _needRedo = true;
         }
         else if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z)) {
-            if(Element::selectedElement)
-                Element::selectedElement->HandleElementSelection();
-            _history->Undo();
+            _needUndo = true;
         }
     }
 
@@ -230,6 +219,30 @@ namespace l5 {
                 fclose(file);
             }
             _saveData = false;
+        }
+
+        if(_needUndo) {
+            if(Element::selectedElement)
+                Element::selectedElement->HandleElementSelection();
+            _history->Undo();
+            _needUndo = false;
+        }
+
+        if(_needRedo) {
+            if(Element::selectedElement)
+                Element::selectedElement->HandleElementSelection();
+            _history->Redo();
+            _needRedo = false;
+        }
+
+        if(_needCopy) {
+            if(l5::Element::selectedElement) {
+                Element* buf = FigureBuilder::ConvertChildClass(l5::Element::selectedElement);
+                buf->SetPointer();
+                _elements.push_back(buf);
+                l5::Element::selectedElement->HandleElementSelection();
+            }
+            _needCopy = false;
         }
 
         for(auto& el: _menus)

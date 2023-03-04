@@ -15,36 +15,21 @@ namespace l5 {
         int _thickness;
 
     public:
-        /*
-         * Constructor with chosen thickness
-         */
         Rectangle(Vector2D pos, Vector2D size, ColorSt color, int thickness);
-        /*
-         * Constructor with thickness with value 1
-         */
         Rectangle(Vector2D pos, Vector2D size, ColorSt color);
         Rectangle(Rectangle& rectangle);
         Rectangle(Rectangle* rectangle);
         bool operator==(Element* element) override;
         Rectangle& operator=(Element* element) override;
         ~Rectangle() override = default;
-        /*
-         * Draw this rectangle on window
-         * If position is not null, then circle will be drawn there
-         */
         void Draw(Vector2D* pos = nullptr) override;
-        /*
-         * Check if a mouse clicked on the rectangle
-         */
         bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
-        /*
-         * Check if the rectangle is inside given area
-         */
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
+
         float* GetSizeXP();
         float* GetSizeYP();
         int* GetThickness();
-        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
     };
 
 } // l5

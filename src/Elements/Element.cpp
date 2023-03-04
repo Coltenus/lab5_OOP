@@ -130,6 +130,7 @@ namespace l5 {
         _previousElement = lastElement;
         if(lastElement) lastElement->_nextElement = this;
         lastElement = this;
+        _nextElement = nullptr;
     }
 
     bool Element::operator==(Element *element) {

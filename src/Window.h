@@ -19,7 +19,7 @@ namespace l5 {
         Window(const char* title, Vector2 size, unsigned int flags, Color color);
         FigureBuilder _builder;
         std::vector<Element*> _elements;
-        bool _done, _clear, _saveData;
+        bool _done, _clear, _saveData, _needUndo, _needRedo, _needCopy;
         Vector2 _mousePos;
         std::vector<l5::Menu*> _menus;
         ElementIterator* _iterator;

@@ -18,37 +18,30 @@ namespace l5 {
 
     public:
         static bool firstPointSelected;
+        // Finds elements within area.
         static std::vector<Element*> FindElements(Vector2D p1, Vector2D p2, std::vector<Element*>& elements);
-        static Element* FindElement(Vector2D p, std::vector<Element*>& elements);
+        // Finds first element in given point.
+        static Element* FindElement(Vector2D point, std::vector<Element*>& elements);
+        // Finds correct point where will be located upper left corner of group.
         static Vector2D FindCorrectPos(Vector2D p1, Vector2D p2);
+        // Find correct size of group.
         static Vector2D FindSize(Vector2D p1, Vector2D p2);
-        /*
-         * This constructor has argument "elements" which is contains elements in selected area
-         */
+
         Group(Vector2D pos, Vector2D size, std::vector<Element*>& elements);
         Group(Group& group);
         Group(Group* group);
         bool operator==(Element* element) override;
         Group& operator=(Element* element) override;
         ~Group() override;
-        /*
-         * Draw this group on window
-         * If position is not null, then circle will be drawn there
-         */
         void Draw(Vector2D* pos = nullptr) override;
-        /*
-         * Check if a mouse clicked on the group
-         */
         bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
-        /*
-         * Check if the group is inside given area
-         */
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = false, bool needColor = false) override;
+
         void SetSize(Vector2D size);
         void SetElements(std::vector<Element*>& elements);
         void AddElement(Element*);
         void ClearElements();
-        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = false, bool needColor = false) override;
     };
 
 } // l5

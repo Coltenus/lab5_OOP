@@ -9,6 +9,9 @@
 
 namespace l5 {
 
+    /*
+     * Button command class which sets recorded value.
+     */
     template<typename T>
     class ValueSetBC : public ButtonCommand {
     private:

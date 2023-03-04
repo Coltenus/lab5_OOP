@@ -31,14 +31,7 @@ namespace l5 {
         virtual bool operator==(Element* element);
         virtual Element& operator=(Element* element);
         virtual ~Element() = default;
-        /*
-         * Draw this element on window
-         * If position is not null, then circle will be drawn there
-         */
         virtual void Draw(Vector2D* pos = nullptr) = 0;
-        /*
-         * Function which provides selection elements and moving them
-         */
         void Update();
         /*
          * Check if a mouse clicked on the element
@@ -51,16 +44,21 @@ namespace l5 {
         // Get element position
         Vector2D GetPos();
         void SetPos(Vector2D pos);
+        // Sets flag to remove this element.
         void StartRemoval();
+        // Returns flag to remove this element.
         bool NeedRemoval();
         int GetType();
         unsigned char* GetRedP();
         unsigned char* GetGreenP();
         unsigned char* GetBlueP();
+        // Disable element selection.
         void HandleElementSelection(bool endSelection = true);
         void SelectionActivate();
+        // Compares elements.
         bool IsSame(Element* element);
         virtual std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true);
+        // Sets pointers to created element.
         void SetPointer();
 
         friend class ElementIterator;

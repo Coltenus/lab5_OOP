@@ -106,12 +106,12 @@ namespace l5 {
         return result;
     }
 
-    Element *Group::FindElement(Vector2D p, std::vector<Element *> &elements) {
+    Element *Group::FindElement(Vector2D point, std::vector<Element *> &elements) {
         Element* result = nullptr;
         bool isFirst = true;
 
         for(auto& el: elements)
-            if(isFirst && el->CheckPosition({p.x + WORKSPACE_X_ST, p.y + WORKSPACE_Y_ST})) {
+            if(isFirst && el->CheckPosition({point.x + WORKSPACE_X_ST, point.y + WORKSPACE_Y_ST})) {
                 result = el;
                 isFirst = false;
             }

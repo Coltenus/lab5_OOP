@@ -7,6 +7,9 @@
 
 namespace l5 {
 
+    /*
+     * Class which connects slider class and its values.
+     */
     template<typename T>
     class SliderCommand {
     private:

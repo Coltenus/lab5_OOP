@@ -14,39 +14,22 @@ namespace l5 {
         int _radius, _thickness;
 
     public:
-        /*
-         * Constructor with chosen thickness
-         */
         Circle(Vector2D pos, int radius, ColorSt ColorSt, int thickness);
-        /*
-         * Constructor with thickness with value 1
-         */
         Circle(Vector2D pos, int radius, ColorSt color);
         Circle(Circle& circle);
         Circle(Circle* circle);
         bool operator==(Element* element) override;
         Circle& operator=(Element* element) override;
         ~Circle() override = default;
-        /*
-         * Draw this circle on window
-         * If position is not null, then the circle will be drawn there
-         */
         void Draw(Vector2D* pos = nullptr) override;
-        /*
-         * Check if a mouse clicked on the circle
-         */
         bool CheckPosition(Vector2D mouse, Vector2D* pos = nullptr) override;
-        /*
-         * Check if the circle is inside given area
-         */
         bool CheckPosition(Vector2D pos1, Vector2D pos2) override;
-        /*
-         * Find closest value inside range between x1 and x2
-         */
+        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
+
+        // Finds closest value to given range.
         static int ClosestValue(int p, int x1, int x2);
         int* GetRadiusP();
         int* GetThicknessP();
-        std::string GetTextData(Vector2D* pos = nullptr, bool needPos = true, bool needColor = true) override;
     };
 
 } // l5

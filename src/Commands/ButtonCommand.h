@@ -7,6 +7,9 @@
 
 namespace l5 {
 
+    /*
+     * Base class which does button command.
+     */
     class ButtonCommand {
     public:
         ButtonCommand() = default;
