@@ -36,7 +36,7 @@ namespace l5 {
         _menus[1]->Add(new l5::ButtonMO("Rectangle (2)", new l5::ValueSetBC<int>(&_builder.mode, 2)));
         _menus[1]->Add(new l5::ButtonMO("Group (3)", new l5::ValueSetBC<int>(&_builder.mode, 3)));
         _menus[1]->Add(new l5::PreviewMO(&_builder, 220));
-        _menus[1]->Add(new l5::EditorMO(&_builder, {200, 350}, false, true));
+        _menus[1]->Add(new l5::EditorMO(&_builder, {250, 350}, false, true));
 
         _menus.push_back(new l5::Menu({0, HEIGHT - 30}, {WIDTH, 30}, {50, 220, 30, 255}, true));
         _menus[2]->Add(new l5::LabelMO<Vector2>("Mouse position: %4.f, %4.f", &_mousePos));
